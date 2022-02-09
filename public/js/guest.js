@@ -1958,6 +1958,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Posts",
@@ -1966,8 +1991,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      apiUrl: 'http://127.0.0.1:8000/api/posts',
-      posts: null
+      apiUrl: 'http://127.0.0.1:8000/api/posts?page=',
+      posts: null,
+      pagination: {}
     };
   },
   mounted: function mounted() {
@@ -1977,8 +2003,13 @@ __webpack_require__.r(__webpack_exports__);
     getPosts: function getPosts() {
       var _this = this;
 
-      axios.get(this.apiUrl).then(function (r) {
-        _this.posts = r.data;
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get(this.apiUrl + page).then(function (r) {
+        _this.pagination = {
+          current: r.data.current_page,
+          last: r.data.last_page
+        };
+        _this.posts = r.data.data;
         console.log(_this.posts);
       })["catch"](function (e) {
         console.log(e);
@@ -2107,7 +2138,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "main[data-v-4ac4d2f8] {\n  padding: 40px 0;\n}", ""]);
+exports.push([module.i, "main[data-v-4ac4d2f8] {\n  padding: 40px 0;\n}\nmain .bottoni[data-v-4ac4d2f8] {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n}\nmain .bottoni button[data-v-4ac4d2f8] {\n  padding: 7px 15px;\n  cursor: pointer;\n}\nmain .bottoni .bottoni_num button[data-v-4ac4d2f8] {\n  margin: 0 2px;\n}", ""]);
 
 // exports
 
@@ -3408,6 +3439,57 @@ var render = function () {
         _vm._l(_vm.posts, function (post) {
           return _c("SinglePost", { key: post.id, attrs: { post: post } })
         }),
+        _vm._v(" "),
+        _c("div", { staticClass: "bottoni" }, [
+          _c(
+            "button",
+            {
+              attrs: { disabled: _vm.pagination.current === 1 },
+              on: {
+                click: function ($event) {
+                  return _vm.getPosts(_vm.pagination.current - 1)
+                },
+              },
+            },
+            [_vm._v("Prev")]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "bottoni_num" },
+            _vm._l(_vm.pagination.last, function (page) {
+              return _c(
+                "button",
+                {
+                  key: page,
+                  attrs: { disabled: _vm.pagination.current === page },
+                  on: {
+                    click: function ($event) {
+                      return _vm.getPosts(page)
+                    },
+                  },
+                },
+                [_vm._v("\n        " + _vm._s(page) + "\n        ")]
+              )
+            }),
+            0
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              attrs: {
+                disabled: _vm.pagination.current === _vm.pagination.last,
+              },
+              on: {
+                click: function ($event) {
+                  return _vm.getPosts(_vm.pagination.current + 1)
+                },
+              },
+            },
+            [_vm._v("Next")]
+          ),
+        ]),
       ],
       2
     ),
