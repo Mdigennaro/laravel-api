@@ -2,14 +2,26 @@
   <main>
     <div class="container">
       <h1>Posts</h1>
-      
+       
+       <SinglePost
+       v-for="post in posts"
+       :key="post.id"
+       :post="post" 
+       />
+
     </div>
   </main>
 </template>
 
 <script>
+import SinglePost from './SinglePost.vue';
+
 export default {
   name: "Posts",
+
+  components:{
+    SinglePost
+  },
 
   data(){
     return{
